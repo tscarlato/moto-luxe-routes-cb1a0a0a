@@ -114,21 +114,21 @@ function MapPage() {
   return (
     <div className="flex flex-col h-screen w-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b border-border/50 shadow-elegant z-50">
-        <div className="flex items-center justify-between px-6 py-4">
+      <header className="bg-card border-b border-border/50 shadow-sm z-50">
+        <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4">
           <Logo size="md" />
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden md:block">
-              Premium Motorcycle Route Planner
+          <div className="flex items-center gap-3 md:gap-4">
+            <span className="text-xs md:text-sm text-muted-foreground hidden sm:block font-medium tracking-wide">
+              Route Planner
             </span>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Map Container */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative order-2 md:order-1 h-1/2 md:h-full">
           <MapContainer
             center={mapSettings.center}
             zoom={mapSettings.zoom}
@@ -143,22 +143,22 @@ function MapPage() {
         </div>
 
         {/* Side Panel */}
-        <aside className="w-full md:w-[400px] bg-card border-l border-border/50 flex flex-col overflow-hidden shadow-elevated">
+        <aside className="w-full md:w-[420px] lg:w-[480px] bg-card border-t md:border-t-0 md:border-l border-border/50 flex flex-col overflow-hidden shadow-elegant order-1 md:order-2 h-1/2 md:h-full">
           {/* Panel Header */}
-          <div className="px-6 py-5 border-b border-border/50 bg-muted/30">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-serif font-normal text-foreground">
-                Trip Planning
+          <div className="px-4 md:px-6 py-4 md:py-5 border-b border-border/50 bg-gradient-to-b from-muted/20 to-transparent">
+            <div className="flex items-center justify-between mb-3 md:mb-4">
+              <h2 className="text-base md:text-lg font-serif font-normal text-foreground tracking-tight">
+                Plan Your Route
               </h2>
               {waypoints.length > 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={clearAllWaypoints}
-                  className="text-muted-foreground hover:text-destructive"
+                  className="text-muted-foreground hover:text-destructive transition-colors h-8 px-2 md:px-3"
                 >
-                  <X className="h-4 w-4 mr-1" />
-                  Clear All
+                  <X className="h-3.5 w-3.5 md:h-4 md:w-4 md:mr-1" />
+                  <span className="hidden md:inline">Clear</span>
                 </Button>
               )}
             </div>
@@ -166,19 +166,19 @@ function MapPage() {
           </div>
 
           {/* Panel Content */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto overscroll-contain">
             {waypoints.length === 0 ? (
               <EmptyState type="waypoints" />
             ) : (
-              <div className="space-y-6 p-6">
+              <div className="space-y-4 md:space-y-6 p-4 md:p-6">
                 <WaypointList
                   waypoints={waypoints}
                   onRemoveWaypoint={removeWaypoint}
                 />
                 
                 {ui.error && (
-                  <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <p className="text-sm text-destructive">{ui.error}</p>
+                  <div className="p-3 md:p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
+                    <p className="text-xs md:text-sm text-destructive font-medium">{ui.error}</p>
                   </div>
                 )}
 

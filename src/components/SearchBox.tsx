@@ -86,10 +86,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onPlaceSelected, isLoaded }) => {
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Search for a location..."
+          placeholder="Search location..."
           value={searchValue}
           onChange={handleInputChange}
-          className="pl-10 pr-10"
+          className="pl-10 pr-10 h-10 md:h-11 text-sm md:text-base bg-background/50 border-border/60 focus:bg-background transition-colors"
         />
       </Autocomplete>
       {searchValue && (
@@ -97,7 +97,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onPlaceSelected, isLoaded }) => {
           variant="ghost"
           size="sm"
           onClick={handleClear}
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+          className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0 hover:bg-muted/50"
         >
           <X className="h-4 w-4" />
         </Button>

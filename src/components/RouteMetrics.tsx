@@ -10,11 +10,12 @@ interface RouteMetricsProps {
 const RouteMetrics: React.FC<RouteMetricsProps> = ({ route, isCalculating }) => {
   if (isCalculating) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-accent border-r-transparent mb-3"></div>
-          <p className="text-sm text-muted-foreground">Calculating route...</p>
+      <div className="flex flex-col items-center justify-center py-10 md:py-12">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-10 w-10 md:h-12 md:w-12 border-2 border-accent/20 border-t-accent" />
+          <div className="absolute inset-0 rounded-full border-2 border-accent/10" />
         </div>
+        <p className="text-xs md:text-sm text-muted-foreground mt-4 font-medium">Calculating route...</p>
       </div>
     );
   }
@@ -26,43 +27,44 @@ const RouteMetrics: React.FC<RouteMetricsProps> = ({ route, isCalculating }) => 
   const { legs, totals } = route;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-5">
       {/* Total Metrics */}
-      <CardPremium>
-        <CardPremiumHeader>
-          <CardPremiumTitle>Trip Summary</CardPremiumTitle>
+      <CardPremium className="border-accent/20 shadow-elegant">
+        <CardPremiumHeader className="pb-3">
+          <CardPremiumTitle className="text-xl md:text-2xl">Journey Overview</CardPremiumTitle>
         </CardPremiumHeader>
-        <CardPremiumContent>
+        <CardPremiumContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                <Route className="h-3 w-3" />
-                <span>Total Distance</span>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Route className="h-4 w-4" />
+                <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold">Distance</span>
               </div>
-              <p className="text-2xl font-serif font-normal text-foreground">
+              <p className="text-xl md:text-2xl font-serif font-normal text-foreground tracking-tight">
                 {totals.distance}
               </p>
             </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                <Clock className="h-3 w-3" />
-                <span>Est. Duration</span>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold">Duration</span>
               </div>
-              <p className="text-2xl font-serif font-normal text-foreground">
+              <p className="text-xl md:text-2xl font-serif font-normal text-foreground tracking-tight">
                 {totals.duration}
               </p>
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-border/50">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">
-                {totals.legCount} leg{totals.legCount !== 1 ? 's' : ''}
-              </span>
+          <div className="pt-3 border-t border-border/30">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-muted-foreground">
-                <Navigation className="h-3 w-3" />
-                <span>Ready to ride</span>
+                <Navigation className="h-4 w-4" />
+                <span className="text-[10px] md:text-xs uppercase tracking-wider font-semibold">Segments</span>
               </div>
+              <span className="text-base md:text-lg font-serif font-normal text-foreground">
+                {legs.length}
+              </span>
             </div>
           </div>
         </CardPremiumContent>
@@ -70,54 +72,62 @@ const RouteMetrics: React.FC<RouteMetricsProps> = ({ route, isCalculating }) => 
 
       {/* Per-Leg Breakdown */}
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-foreground">Leg Details</h3>
-        {legs.map((leg: any) => (
-          <div
-            key={leg.legNumber}
-            className="p-4 rounded-lg bg-muted/30 border border-border/30 space-y-3"
-          >
-            {/* Leg Header */}
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-accent">
-                Leg {leg.legNumber}
-              </span>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Route className="h-3 w-3" />
-                  <span>{leg.distance}</span>
+        <h3 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          Segment Details
+        </h3>
+        
+        {legs.map((leg: any, index: number) => (
+          <div key={index}>
+            <CardPremium className="hover:shadow-elevated transition-shadow">
+              <CardPremiumContent className="p-3 md:p-4">
+                <div className="flex items-start gap-2.5 md:gap-3">
+                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0 ring-1 ring-accent/20">
+                    <span className="text-xs md:text-sm font-bold text-accent">
+                      {index + 1}
+                    </span>
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="grid grid-cols-2 gap-2 md:gap-3 mb-3">
+                      <div>
+                        <p className="text-[10px] md:text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">Distance</p>
+                        <p className="text-xs md:text-sm font-semibold text-foreground">
+                          {leg.distance}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] md:text-xs text-muted-foreground mb-1 uppercase tracking-wide font-medium">Duration</p>
+                        <p className="text-xs md:text-sm font-semibold text-foreground">
+                          {leg.duration}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-[10px] md:text-xs text-muted-foreground mb-0.5 font-medium">From</p>
+                        <p className="text-[11px] md:text-xs text-foreground leading-snug line-clamp-2">
+                          {leg.startAddress}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] md:text-xs text-muted-foreground mb-0.5 font-medium">To</p>
+                        <p className="text-[11px] md:text-xs text-foreground leading-snug line-clamp-2">
+                          {leg.endAddress}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  <span>{leg.duration}</span>
-                </div>
+              </CardPremiumContent>
+            </CardPremium>
+            
+            {/* Connection arrow */}
+            {index < legs.length - 1 && (
+              <div className="flex justify-center py-2">
+                <div className="w-0.5 h-3 md:h-4 bg-gradient-to-b from-accent/40 to-accent/10 rounded-full" />
               </div>
-            </div>
-
-            {/* Route Visualization */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs font-medium flex-shrink-0">
-                  {leg.legNumber}
-                </div>
-                <span className="text-foreground/80 line-clamp-1">
-                  {leg.startAddress}
-                </span>
-              </div>
-              <div className="ml-3 border-l-2 border-accent/30 pl-5 py-1">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <div className="w-1 h-1 rounded-full bg-accent/50"></div>
-                  <span className="text-xs">{leg.distance} • {leg.duration}</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs font-medium flex-shrink-0">
-                  {leg.legNumber + 1}
-                </div>
-                <span className="text-foreground/80 line-clamp-1">
-                  {leg.endAddress}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         ))}
       </div>

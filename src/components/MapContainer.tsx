@@ -170,10 +170,13 @@ const MapContainer: React.FC<MapContainerProps> = ({
 
   if (!isLoaded) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-muted">
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/10 to-muted/30">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-accent border-r-transparent mb-4"></div>
-          <p className="text-sm text-muted-foreground">Loading map...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-12 w-12 border-2 border-accent/20 border-t-accent mx-auto" />
+            <div className="absolute inset-0 rounded-full border-2 border-accent/10 mx-auto" />
+          </div>
+          <p className="text-xs md:text-sm text-muted-foreground mt-4 font-medium tracking-wide">Loading map...</p>
         </div>
       </div>
     );
@@ -215,32 +218,28 @@ const MapContainer: React.FC<MapContainerProps> = ({
         )}
       </GoogleMap>
 
-      {/* Map Controls Overlay */}
-      <div className="absolute top-6 left-6 glass-panel p-4 rounded-lg shadow-elegant">
-        <div className="flex items-center gap-3">
-          <Navigation className="h-5 w-5 text-accent" />
-          <div className="flex items-center gap-2">
-            <Switch
-              id="avoid-highways"
-              checked={avoidHighways}
-              onCheckedChange={onToggleHighways}
-            />
-            <Label htmlFor="avoid-highways" className="text-sm font-medium cursor-pointer">
-              Avoid Highways
-            </Label>
-          </div>
-        </div>
-      </div>
-
-      {/* Info overlay */}
+      {/* Map Info Overlay - Top Center */}
       {waypoints.length === 0 && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-lg shadow-elegant">
-          <p className="text-sm text-foreground flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-accent" />
-            Click anywhere on the map to add your first waypoint
+        <div className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 glass-panel px-4 md:px-6 py-2.5 md:py-3 rounded-lg shadow-elegant pointer-events-none z-10 max-w-[90%] md:max-w-md">
+          <p className="text-xs md:text-sm text-center text-foreground font-medium leading-snug">
+            Click the map to begin plotting
           </p>
         </div>
       )}
+
+      {/* Highway Toggle - Bottom Left */}
+      <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 glass-panel p-3 md:p-4 rounded-lg shadow-elegant z-10">
+        <div className="flex items-center space-x-2 md:space-x-3">
+          <Label htmlFor="highway-toggle" className="text-xs md:text-sm font-medium text-foreground cursor-pointer whitespace-nowrap">
+            Avoid Highways
+          </Label>
+          <Switch
+            id="highway-toggle"
+            checked={avoidHighways}
+            onCheckedChange={onToggleHighways}
+          />
+        </div>
+      </div>
     </div>
   );
 };

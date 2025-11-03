@@ -23,33 +23,30 @@ const WaypointList: React.FC<WaypointListProps> = ({ waypoints, onRemoveWaypoint
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-serif font-normal text-foreground">
-          Route Stops
-        </h3>
-        <span className="text-sm text-muted-foreground">
-          {waypoints.length} waypoint{waypoints.length !== 1 ? 's' : ''}
-        </span>
-      </div>
-
-      <div className="space-y-2">
-        {waypoints.map((waypoint) => (
+    <div className="space-y-3">
+      <h3 className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+        Route ({waypoints.length})
+      </h3>
+      
+      <div className="space-y-2.5">
+        {waypoints.map((waypoint, index) => (
           <div
             key={waypoint.id}
-            className="group flex items-start gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-all border border-border/30"
+            className="group relative bg-gradient-to-br from-muted/20 to-muted/40 rounded-lg p-3 md:p-4 border border-border/40 hover:border-accent/60 hover:shadow-md transition-all duration-250"
           >
-            {/* Waypoint Number */}
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center font-medium text-sm shadow-sm">
+            {/* Waypoint Number Badge */}
+            <div className="absolute -left-2.5 md:-left-3 top-3 md:top-4 w-6 h-6 md:w-7 md:h-7 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs md:text-sm font-bold shadow-elegant ring-2 ring-background">
               {waypoint.order}
             </div>
-
-            {/* Waypoint Details */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground leading-tight mb-1">
+            
+            <div className="pl-6 md:pl-7 pr-9 md:pr-10">
+              {/* Address */}
+              <p className="text-xs md:text-sm font-medium text-foreground mb-1 leading-snug line-clamp-2">
                 {waypoint.address}
               </p>
-              <p className="text-xs text-muted-foreground font-mono">
+              
+              {/* Coordinates */}
+              <p className="text-[10px] md:text-xs text-muted-foreground font-mono tracking-tight">
                 {waypoint.position.lat.toFixed(4)}, {waypoint.position.lng.toFixed(4)}
               </p>
             </div>
@@ -59,20 +56,26 @@ const WaypointList: React.FC<WaypointListProps> = ({ waypoints, onRemoveWaypoint
               variant="ghost"
               size="sm"
               onClick={() => onRemoveWaypoint(waypoint.id)}
-              className="flex-shrink-0 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+              className="absolute right-1.5 md:right-2 top-2.5 md:top-3 h-6 w-6 md:h-7 md:w-7 p-0 opacity-60 md:opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive/10 hover:text-destructive"
               aria-label={`Remove waypoint ${waypoint.order}`}
             >
-              <X className="h-4 w-4" />
+              <X className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </Button>
+
+            {/* Connection Line to Next Waypoint */}
+            {index < waypoints.length - 1 && (
+              <div className="absolute -bottom-2.5 left-0 w-6 md:w-7 flex justify-center">
+                <div className="w-0.5 h-2.5 bg-gradient-to-b from-accent/50 to-accent/20" />
+              </div>
+            )}
           </div>
         ))}
       </div>
 
       {waypoints.length === 1 && (
-        <div className="flex items-start gap-3 p-3 rounded-lg bg-accent/10 border border-accent/20">
-          <Lightbulb className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-foreground">
-            Add one more waypoint to calculate your route
+        <div className="mt-4 p-3 md:p-4 glass-panel border-primary/30">
+          <p className="text-xs md:text-sm text-foreground font-medium leading-relaxed">
+            Add another waypoint to plot your journey
           </p>
         </div>
       )}
