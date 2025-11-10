@@ -194,20 +194,22 @@ const MapContainer: React.FC<MapContainerProps> = ({
         options={MAP_OPTIONS}
       >
         {/* Waypoint markers */}
-        {waypoints.map((waypoint) => (
-          <Marker
-            key={waypoint.id}
-            position={waypoint.position}
-            icon={getMarkerIcon(waypoint.order)}
-            label={{
-              text: waypoint.order.toString(),
-              color: '#F9F7F3',
-              fontSize: '12px',
-              fontWeight: 'bold'
-            }}
-            title={waypoint.address}
-          />
-        ))}
+        {waypoints
+          .filter((waypoint) => waypoint && waypoint.position && waypoint.position.lat !== undefined)
+          .map((waypoint) => (
+            <Marker
+              key={waypoint.id}
+              position={waypoint.position}
+              icon={getMarkerIcon(waypoint.order)}
+              label={{
+                text: waypoint.order.toString(),
+                color: '#F9F7F3',
+                fontSize: '12px',
+                fontWeight: 'bold'
+              }}
+              title={waypoint.address}
+            />
+          ))}
 
         {/* Route polyline */}
         {route && (
