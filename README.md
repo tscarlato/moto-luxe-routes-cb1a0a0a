@@ -1,73 +1,88 @@
-# Welcome to your Lovable project.
+# MotoMap
 
-## Project info
+Premium motorcycle route planning application with Firebase integration.
 
-**URL**: https://lovable.dev/projects/8b23a5be-4fd5-411f-809a-a680d3e664ef
+## Features
 
-## How can I edit this code?
+- **Route Planning** - Click the map or search to add waypoints
+- **Route Optimization** - Choose scenic routes, avoid highways
+- **Trip Metrics** - Distance, duration, and detailed route information
+- **Save & Share** - Save trips to your account and share with unique links
+- **User Accounts** - Email/password or Google Sign-In authentication
+- **Responsive Design** - Works on desktop, tablet, and mobile
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend:** React, TypeScript, Vite
+- **UI:** shadcn/ui, Tailwind CSS
+- **Backend:** Firebase (Auth + Firestore)
+- **Maps:** Google Maps API (Maps, Directions, Geocoding, Places)
+- **Deployment:** Railway
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8b23a5be-4fd5-411f-809a-a680d3e664ef) and start prompting.
+## Development
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ (with npm)
+- Google Maps API key with enabled APIs:
+  - Maps JavaScript API
+  - Directions API
+  - Geocoding API
+  - Places API
+- Firebase project with Firestore and Authentication enabled
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Setup
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd moto-luxe-routes-cb1a0a0a
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Create `.env.local` file with your credentials:
+```bash
+cp .env.local.example .env.local
+# Edit .env.local with your actual API keys
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+5. Build for production:
+```bash
+npm run build
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Environment Variables
 
-**Use GitHub Codespaces**
+Required environment variables (see `.env.local.example`):
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- `VITE_GOOGLE_MAPS_API_KEY` - Google Maps API key
+- `VITE_FIREBASE_API_KEY` - Firebase API key
+- `VITE_FIREBASE_AUTH_DOMAIN` - Firebase auth domain
+- `VITE_FIREBASE_PROJECT_ID` - Firebase project ID
+- `VITE_FIREBASE_STORAGE_BUCKET` - Firebase storage bucket
+- `VITE_FIREBASE_MESSAGING_SENDER_ID` - Firebase messaging sender ID
+- `VITE_FIREBASE_APP_ID` - Firebase app ID
+- `VITE_FIREBASE_MEASUREMENT_ID` - Firebase measurement ID (optional)
 
-## What technologies are used for this project?
+## Deployment
 
-This project is built with:
+This app is configured to deploy on Railway. When deploying:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. Set all environment variables in Railway dashboard
+2. Railway will automatically detect the project and run:
+   - `npm install`
+   - `npm run build`
+   - `npm start`
 
-## How can I deploy this project?
+## License
 
-Simply open [Lovable](https://lovable.dev/projects/8b23a5be-4fd5-411f-809a-a680d3e664ef) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Private - All rights reserved
