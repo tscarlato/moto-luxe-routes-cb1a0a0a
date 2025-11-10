@@ -146,19 +146,23 @@ export const createTripFromMapState = (
   settings: TripSettings,
   route: any
 ): Omit<Trip, 'id' | 'createdAt' | 'updatedAt'> => {
-  const metrics: RouteMetrics | undefined = route ? {
-    totalDistance: route.totalDistance || 0,
-    totalDuration: route.totalDuration || 0,
-    legs: route.legs?.length || 0,
-  } : undefined;
-
-  return {
+  const tripData: any = {
     userId,
     name,
     description,
     waypoints,
     settings,
-    metrics,
     isShared: false,
   };
+
+  // Only include metrics if route is available
+  if (route && route.totalDistance !== undefined && route.totalDuration !== undefined) {
+    tripData.metrics = {
+      totalDistance: route.totalDistance || 0,
+      totalDuration: route.totalDuration || 0,
+      legs: route.legs?.length || 0,
+    };
+  }
+
+  return tripData;
 };
