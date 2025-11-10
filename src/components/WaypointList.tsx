@@ -15,9 +15,10 @@ interface Waypoint {
 interface WaypointListProps {
   waypoints: Waypoint[];
   onRemoveWaypoint: (id: string) => void;
+  readOnly?: boolean;
 }
 
-const WaypointList: React.FC<WaypointListProps> = ({ waypoints, onRemoveWaypoint }) => {
+const WaypointList: React.FC<WaypointListProps> = ({ waypoints, onRemoveWaypoint, readOnly = false }) => {
   if (waypoints.length === 0) {
     return null;
   }
@@ -52,15 +53,17 @@ const WaypointList: React.FC<WaypointListProps> = ({ waypoints, onRemoveWaypoint
             </div>
 
             {/* Remove Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onRemoveWaypoint(waypoint.id)}
-              className="absolute right-1.5 md:right-2 top-2.5 md:top-3 h-6 w-6 md:h-7 md:w-7 p-0 opacity-60 md:opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive/10 hover:text-destructive"
-              aria-label={`Remove waypoint ${waypoint.order}`}
-            >
-              <X className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </Button>
+            {!readOnly && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onRemoveWaypoint(waypoint.id)}
+                className="absolute right-1.5 md:right-2 top-2.5 md:top-3 h-6 w-6 md:h-7 md:w-7 p-0 opacity-60 md:opacity-0 group-hover:opacity-100 transition-all hover:bg-destructive/10 hover:text-destructive"
+                aria-label={`Remove waypoint ${waypoint.order}`}
+              >
+                <X className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              </Button>
+            )}
 
             {/* Connection Line to Next Waypoint */}
             {index < waypoints.length - 1 && (

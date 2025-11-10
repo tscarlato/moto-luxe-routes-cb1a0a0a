@@ -1,21 +1,38 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useJsApiLoader } from '@react-google-maps/api';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTrips } from '@/contexts/TripContext';
 import MapContainer from '../components/MapContainer';
 import SearchBox from '../components/SearchBox';
 import WaypointList from '../components/WaypointList';
 import RouteMetrics from '../components/RouteMetrics';
 import EmptyState from '../components/EmptyState';
 import Logo from '../components/Logo';
+import { TripActions } from '../components/trips/TripActions';
 import { DEFAULT_CENTER, DEFAULT_ZOOM, GOOGLE_MAPS_LIBRARIES } from '../utils/mapConfig';
 import { calculateRoute } from '../utils/routeCalculator';
-import { X } from 'lucide-react';
+import { X, User, LogOut, FolderOpen } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown-menu';
+import { AuthModal } from '../components/auth/AuthModal';
 
 function MapPage() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { currentTrip, clearCurrentTrip } = useTrips();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   // Load Google Maps API - use environment variable or empty string
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY ||
                  (typeof process !== 'undefined' && process.env?.REACT_APP_GOOGLE_MAPS_API_KEY) || '';
-  
+
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: apiKey,
     libraries: GOOGLE_MAPS_LIBRARIES
@@ -33,6 +50,17 @@ function MapPage() {
     isCalculating: false,
     error: null as string | null
   });
+
+  // Load waypoints from current trip
+  useEffect(() => {
+    if (currentTrip && currentTrip.waypoints) {
+      setWaypoints(currentTrip.waypoints);
+      setMapSettings(prev => ({
+        ...prev,
+        avoidHighways: currentTrip.settings.avoidHighways,
+      }));
+    }
+  }, [currentTrip]);
 
   // Waypoint management functions
   const addWaypoint = useCallback((position: any, address: string) => {
@@ -60,7 +88,8 @@ function MapPage() {
     setWaypoints([]);
     setRoute(null);
     setUi(prev => ({ ...prev, error: null }));
-  }, []);
+    clearCurrentTrip();
+  }, [clearCurrentTrip]);
 
   // Route calculation
   useEffect(() => {
@@ -118,12 +147,41 @@ function MapPage() {
         <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4">
           <Logo size="md" />
           <div className="flex items-center gap-3 md:gap-4">
-            <span className="text-xs md:text-sm text-muted-foreground hidden sm:block font-medium tracking-wide">
-              Route Planner
-            </span>
+            <TripActions
+              waypoints={waypoints}
+              settings={mapSettings}
+              route={route}
+            />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <User className="h-4 w-4" />
+                    <span className="hidden sm:inline">{user.displayName || user.email}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate('/trips')}>
+                    <FolderOpen className="mr-2 h-4 w-4" />
+                    My Trips
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button onClick={() => setShowAuthModal(true)} variant="outline" size="sm">
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
       </header>
+
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 
       {/* Main Content */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
